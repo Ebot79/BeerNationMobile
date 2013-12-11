@@ -1,0 +1,24 @@
+extends layout
+block content
+	if (message)
+		p message
+	form(roll="form", action="/signup", method="POST")
+		legend Create your profile
+		.form-group
+			label First
+			input(name="user[first]", type="text", class="form-control", required, placeholder="first name")
+		.form-group
+			label Last
+			input(name="user[last]", type="text", class="form-control", required, placeholder="last name")
+		.form-group
+			label email
+			input(name="user[email]", type="email", class="form-control", required, placeholder="example@domain.com")
+		.form-group
+			label password
+			input(name="user[password]", type="password", class="form-control", require, placeholder="p@ssw0rd")
+		.form-group
+			label public handle
+			input(name="user[handle]", type="text", class="form-control", require, placeholder="user name")
+		button Submit
+	
+		

@@ -1,0 +1,203 @@
+//routes 
+var  User = require('../user-model')
+	,BreweryDb = require('brewerydb-node');
+		
+	
+//brewerydb connection
+var brewdb = new BreweryDb('88192fcae992b278f4a47fa5b8d561bb');
+	
+//default route
+exports.index = function (req, res, err){	
+	console.log('default');	
+	if(req.session.loggedIn == null){
+		brewdb.breweries.find( { established: 2010 }, function(err, data){
+			if(err) consol.log(err);
+			var sample = [], i = 0;
+			for(i;i<10;i++){
+				sample.push(data[i]);
+			}
+			console.log(sample)
+			
+		});
+	}
+	res.render('index',{pageTitle:'Nation of Beer', sample: sample});
+	}
+
+//login route
+exports.login =  function (req, res){
+	console.log('login');
+	res.render('login', {pageTitle: 'log in'});
+	}
+
+
+//signup route
+exports.signup = function(req, res){
+	console.log('signup');
+	res.render('signup');
+	}
+
+//signup POST route processing 
+exports.newUser = function(req, res, next){
+	console.log('signup POST route');
+	
+	var testUser = new User(req.body.user);
+	
+	testUser.save(function(err) {
+  	if(err) {
+  		console.error(mongoose.getLastError());  	
+  		res.render('/login', {message: 'Save Error'});  	
+  	}else	res.redirect('/login/' + req.body.user.email);	
+	});
+	}
+	
+
+//signup->login redirect
+exports.success = function (req, res){
+	console.log('login');
+	res.render('login', {signupEmail: req.params.signupEmail});
+	}
+
+
+//login processing route
+exports.signin = function(req, res){
+	User.findOne({email:req.body.user.email}, function(err, user){
+	
+		if(err) return next(err);
+		if(!user) return res.send('<p>User not found. Go back and try again</p>');
+		console.log(req.body.user.password);
+//check password
+		user.comparePassword(req.body.user.password, function(err, isMatch){
+			if(err) throw err;
+			console.log(""+isMatch);
+			if(isMatch){
+			//not setting session variable????????????????????????????????????????????????????????????
+			//resolved by moving app.use(routes ) under the assignment of this variable.
+				console.log(user._id.toString());
+				req.session.loggedIn = user._id.toString();
+				res.redirect('/');
+			}else return res.send('<p>User not found. Go back and try again</p>');
+		});	
+	});
+	}
+
+//logout route
+exports.logout = function(req,res){
+	req.session.loggedIn = null;
+	res.redirect('/');
+	}
+
+
+
+//add beer route
+exports.beer = function(req, res){
+	console.log('addBeer');
+	res.render('addBeer');
+	}
+
+//add beer POST route
+exports.addBeer = function(req, res){
+	console.log('addBeer POST route');
+	
+	User.findByIdAndUpdate(req.session.loggedIn
+		,{$push: {beerList: req.body.beer}}
+		,{upsert:true}
+		,function(err,user){
+			if(err){ 
+				console.log(err);
+				res.redirect('/addBeer');
+			}else{
+				console.log('beer added');
+				res.redirect('/');
+			}
+	});
+	
+	}
+	
+//editBeer GET route
+exports.editBeer = function(req, res){
+
+	var beer;//place holder for the object
+
+	User.findById(req.session.loggedIn, function(err, user){
+		if(err)console.log(err);
+		for(var i=0;i<user.beerList.length;i++){
+			if (user.beerList[i]._id == req.params.beerID) beer = user.beerList[i];
+		}
+		if(beer) res.render('editBeer', {beer: beer, pageTitle:'edit beer'});
+	});
+}
+
+//editBeer POST route 
+exports.editList = function(req,res){
+
+	var beer = { name : req.body.beer.name, brewer : req.body.beer.brewer, rank : req.body.beer.rank };
+	
+	User.findById(req.session.loggedIn, function(err, user){
+		if (err) console.log(err);
+		if (user){
+			
+			for(var i=0;i<user.beerList.length;i++){
+				console.log('found '+user.beerList[i]._id);
+				console.log('using '+req.body.beer.id);
+				if (user.beerList[i]._id == req.body.beer.id){
+					
+					console.log('user beer '+user.beerList[i].name+' found' );
+					user.beerList.set(i,beer);
+
+					user.save(function(err) {
+						if(err) {
+					  		console.log(err);
+				  		}else	console.log('update success');
+					});
+					break;
+				}
+				
+			}
+			
+			res.redirect('/');
+			
+		}
+	});
+	
+}
+
+exports.deleteBeer = function(req, res){
+
+	console.log('deleteBeer with id'+req.params.beerID);
+	User.findByIdAndUpdate(req.session.loggedIn
+							,{$pull: { beerList: { _id: req.params.beerID}}}
+							,function (err, user){
+								if(err)console.log(err);
+								res.redirect('/');
+							}
+	);
+	
+		
+	
+
+}
+
+ exports.beerPage = function (req, res, err){
+	console.log('beer');
+	
+	res.render('beer',{pageTitle: 'Master Beer List'});
+	
+}
+
+ exports.brewerPage = function (req, res, err){
+	console.log('brewers');
+	
+	res.render('brewers',{pageTitle: 'Master brewer List'});
+	
+}
+
+ exports.pubPage = function (req, res, err){
+	console.log('pubs');
+	
+	res.render('pubs',{pageTitle: 'Master pub List'});
+	
+}
+
+
+
+

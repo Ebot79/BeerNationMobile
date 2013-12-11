@@ -1,0 +1,37 @@
+extends layout
+block content
+	if(message)
+		h2 #{message}
+	else
+		h1 #{me.first}'s Beer List
+		a(class = "btn btn-info", href="/addBeer") Add a Beer
+		#listOfBeer.list-group
+				
+					
+	script.
+		$(document).ready(function(){
+			var list = $('#listOfBeer');
+			//ajax
+			$.get('/getList' , function(data){
+				console.log(data);
+				var beers = data;
+					
+				for(var i=0; i<beers.length; i++){
+					if (beers[i] != null)
+					list.append(buildList(beers[i]));
+				}
+			});
+			
+			function buildList(beer) {
+				var item = '<div class="list-group-item">';
+				if(beer.name) item += '<h4 class = "list-group-item-heading" >'+beer.name+'</h4>';
+				if(beer.breweries[0].name) item += '<p class="list-group-item-text" >' +beer.breweries[0].name+'</p>';
+				if(beer.description) item += '<p class="list-group-item-text" >'+beer.description+'</p>';
+				if(beer.labels){
+					if(beer.labels.icon) item += '<img src="'+beer.labels.icon+'"/>';
+				}
+				item +='</div>';
+				
+				return $(item);
+			}
+		});

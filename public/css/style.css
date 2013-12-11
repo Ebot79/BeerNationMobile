@@ -1,0 +1,42 @@
+.list-group-item {
+  border: 1px solid #ccc;
+}
+.session {
+  float: left;
+}
+.session p {
+  color: #d43997;
+}
+.rate_widget {
+  border: 1px solid #ccc;
+  overflow: visible;
+  padding: 10px;
+  position: relative;
+  width: 180px;
+  height: 32px;
+}
+.ratings_stars {
+  background: url("../img/star_empty.png") no-repeat;
+  float: left;
+  height: 28px;
+  padding: 2px;
+  width: 32px;
+}
+.ratings_vote {
+  background: url("../img/star_full.png") no-repeat;
+}
+.ratings_over {
+  background: url("../img/star_highlight.png") no-repeat;
+}
+.total_votes {
+  background: #eaeaea;
+  top: 58px;
+  left: 0;
+  padding: 5px;
+  position: absolute;
+}
+.beerChoice {
+  font: 10px verdana, sans-serif;
+  margin: 0 auto 40px auto;
+  width: 180px;
+}

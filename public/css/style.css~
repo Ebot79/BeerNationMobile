@@ -1,0 +1,8 @@
+.session{
+float: right;
+
+}
+.navbar-inner img{
+	float:left;
+
+}

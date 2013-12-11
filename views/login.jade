@@ -1,0 +1,19 @@
+extends layout
+block content
+	if (signupEmail)
+		p Congratulations on signing up! Login below.
+	if (message)
+		h1 #{message}
+
+	form(roll="form", action="/login/signin", method="POST")
+		legend Log In
+		.form-group
+			label Email
+			input(name="user[email]",type="email", class="form-control", value=signupEmail, required, placeholder="example@domain.com")
+		.form-group
+			label Password
+			input(name="user[password]",type="password", class="form-control", require, placeholder="p@ssw0rd")
+		button Submit
+	.siteDescript
+		p
+			Beer Nation is an app that keeps track of the craft beers you have tried. 

@@ -1,0 +1,21 @@
+div.navbar.navbar-inverse.navbar-fixed-top
+	
+	div.navbar-inner
+		img(src="img/BNLogo.png") 
+		div.container
+			h1
+				a(href="/home") Beer Nation
+			div.session 
+				if (authenticated)
+					p Welcome back, #{me.first}
+					ul
+						li 
+							a(href="/logout") Logout
+				else
+					p Welcome visitor!
+					ul
+						li
+							a(href='/') Login 
+						li
+							a(href="/signup") Signup
+

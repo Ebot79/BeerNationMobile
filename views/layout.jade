@@ -1,0 +1,35 @@
+!!!5
+html
+	head
+		block head
+			block title
+				title= pageTitle || 'Beer Nation'
+			block meta
+				meta(name='viewport', content='width=device-width, initial-scale=1.0')
+				
+			link(rel='stylesheet', href='/css/bootstrap.min.css')
+			link(rel='stylesheet', href='/css/style.styl')
+			link(rel='stylesheet', href='/css/typeahead.js-bootstrap.css')
+			link(rel='shortcut icon' href='img/shortcutIcon.png')
+			link(rel='shortcut icon' href='img/favicon.ico')
+			link(rel="apple-touch-icon", href="iPhoneIcon.png")
+			link(rel="apple-touch-icon", sizes="76x76", href="img/apple-touch-icon-76x76.png")
+			link(rel="apple-touch-icon", sizes="120x120", href="img/appleTouch120sq.png")
+			link(rel="apple-touch-icon", sizes="152x152", href="img/appleTouchLarge.png")
+			| <style>
+			| @media (min-width: 300px) { body { padding-top: 125px; } }
+			| .session{float: right; color:red;}
+			| .navbar-inner img{	float:left;}
+			| </style>
+			script(src='//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js')
+			script(src="/scripts/typeahead.min.js")
+			script(src="/scripts/jquery.transition.js")
+			script(src="//cdnjs.cloudflare.com/ajax/libs/async/0.2.7/async.min.js")
+			
+	body
+		include header
+
+		.container
+			block content
+
+		include footer

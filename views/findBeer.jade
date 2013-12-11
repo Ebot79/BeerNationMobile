@@ -1,0 +1,34 @@
+extends layout
+block content
+	title = "Find Beer"
+	if(message)
+		h2 message
+	h1 Get Beer by Brewer
+	
+	input(name="brewery", id="brewerySearch", class="typeahead text-block", type="text", autocomplete="off", placeholder = "Brewer")
+	button(id='beerLookup',type="button", class="btn btn-default") search brewer
+	.selectedBrewer
+		div#listOfBeer.btn-group
+		div#beerModal.modal.fade(tabindex="-1", role="dialog", aria-labelledby="myModalLabel", aria-hidden="true")
+			.modal-dialog
+				.modal-content
+					.modal-header
+						h4(id="modalTitle")
+					.modal-body
+						.beerChoice
+							h3 Rate this beer
+							div#r1.rate_widget
+								div.star_1.ratings_stars
+								div.star_2.ratings_stars
+								div.star_3.ratings_stars
+								div.star_4.ratings_stars
+								div.star_5.ratings_stars
+								div.total_votes vote data
+					.modal-footer
+						button(type="button", class="btn btn-default", data-dismiss="modal") Close
+						button#addBeer(type="button", class="btn btn-primary") Add this beer
+		
+		
+	script(src="/scripts/typeahead.min.js")
+	script(src="/scripts/brewSearch.js")
+		
